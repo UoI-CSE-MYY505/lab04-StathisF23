@@ -14,7 +14,7 @@ marianna: .string "Marianna"
 # The labels below are replaced by the respective addresses
 arraySorted:    .word maria, marianna, marios, markos
 
-arrayNotSorted: .word marianna, markos, maria
+arrayNotSorted: .word marianna, markos, maria, marios
 
 .text
 
@@ -28,10 +28,23 @@ arrayNotSorted: .word marianna, markos, maria
 str_ge:
 #---------
 # Write the subroutine code here
-#  You may move jr ra   if you wish.
-#---------
+        loop:
+            lb t0, 0(a0)
+            lb t1, 0(a1)
+            
+            blt t0, t1, return 
+            beq t1, zero, exit
+            
+            addi a0, a0, 1
+            addi a1, a1, 1            
+            j loop
+            
+        return:
+            add a0, zero ,zero
             jr   ra
- 
+         exit:
+             addi a0, a0, 1
+             jr ra
 # ----------------------------------------------------------------------------
 # recCheck(array, size)
 # if size == 0 or size == 1
@@ -44,6 +57,43 @@ str_ge:
 recCheck:
 #---------
 # Write the subroutine code here
+            #check size
+            li t6, 2
+            blt a1, t6, return1
+            
+            #load strs from array
+            lw t0, 0(a0)
+            lw t1, 4(a0)
+            
+            #call str_ge
+            addi sp, sp, -4
+            sw ra, 0(sp)
+            
+            add a0, t1, zero
+            add a1, t0, zero
+            
+            jal str_ge
+            
+            lw ra, 0(sp)
+            addi sp, sp, 4
+            
+            beq a0, zero, return0
+            
+            #continue
+            addi a0, a0, 4
+            addi a1, a1, -1
+            jal recCheck
+            
+            jr ra
+            
+            
+        return1:
+            addi a0, zero, 1
+            jr ra
+            
+        return0:
+            li a0, 0
+            jr ra
+            
 #  You may move jr ra   if you wish.
 #---------
-            jr   ra
