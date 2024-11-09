@@ -40,10 +40,10 @@ str_ge:
             j loop
             
         return:
-            add a0, zero ,zero
+            li a0, 0
             jr   ra
          exit:
-             addi a0, a0, 1
+             li a0, 1
              jr ra
 # ----------------------------------------------------------------------------
 # recCheck(array, size)
@@ -85,7 +85,6 @@ recCheck:
             jal recCheck
             
             jr ra
-            
             
         return1:
             addi a0, zero, 1
