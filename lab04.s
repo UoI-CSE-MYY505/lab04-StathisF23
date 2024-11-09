@@ -32,8 +32,10 @@ str_ge:
             lb t0, 0(a0)
             lb t1, 0(a1)
             
-            blt t0, t1, return 
-            beq t1, zero, exit
+            blt t0, t1, return
+            bgt t0, t1, exit        
+            beq t0, zero, exit
+
             
             addi a0, a0, 1
             addi a1, a1, 1            
@@ -58,8 +60,9 @@ recCheck:
 #---------
 # Write the subroutine code here
             #check size
-            li t6, 2
-            blt a1, t6, return1
+            li t6, 1
+            beq a1, t6, return1
+            beq a1, zero, return1
             
             #load strs from array
             lw t0, 0(a0)
